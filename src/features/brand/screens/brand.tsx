@@ -22,7 +22,7 @@ const BrandPage: FC = () => {
   }
   useEffect(()=>{
     const getData= async()=>{
-      const res =await api.get(`product/all?limit=8&&typeId=${filterOption?.typeId} ${filterOption?.page?`&&page=${filterOption?.page-1}`:'' }`);
+      const res =await api.get(`product/all?limit=8&&typeId=${filterOption?.typeId} ${filterOption?.page?`&&page=${filterOption?.page-1}`:'' }${filterOption?.priceMax?`&&priceMax=${filterOption?.priceMax}`:'' }${filterOption?.priceMin?`&&priceMin=${filterOption?.priceMin}`:'' }`);
       const convertDataType= res.data.products.rows.map((obj: any) => ({
         ...obj,
         name: obj.productName, 

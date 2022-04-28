@@ -4,7 +4,7 @@ import { FC, useState } from 'react';
 import { marks } from '../brand';
 
 export interface FilterByPriceProps {
-  onFilterPrice:(id:any)=>void
+  onFilterPrice:(priceObj:any)=>void
 }
 
 const FilterByPrice: FC<FilterByPriceProps> = ({onFilterPrice}) => {
@@ -18,7 +18,12 @@ const FilterByPrice: FC<FilterByPriceProps> = ({onFilterPrice}) => {
     setValue(newValue as number[]);
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    onFilterPrice({
+      priceMax:value[0],
+      priceMin: value[1]
+    })
+  };
 
   const handleClear = () => {
     setValue([0, 0]);

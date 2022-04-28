@@ -11,10 +11,8 @@ import FilterByType from './FilterByType';
 export interface FilterOption {
   typeId?: number;
   sizes?: String[],
-  price?: {
-    priceMin: number,
-    priceMax: number
-  },
+    priceMin?: number,
+    priceMax?: number
   limit?:number,
   page?:number
 }
@@ -23,9 +21,9 @@ export interface Prop {
   onChangeOption:(option: FilterOption)=>void
 }
 
+let filterOption:FilterOption={};
 const BrandFilter: FC<Prop> = ({onChangeOption}) => {
   const [data, setData] = useState([]);
-  let filterOption:FilterOption={};
   const path:any= useParams();
   const brandId= path?.slug.split('-')[path?.slug.split('-').length-1];
 
@@ -50,8 +48,12 @@ const BrandFilter: FC<Prop> = ({onChangeOption}) => {
     onChangeOption(filterOption)
   }
 
-  const handleFilterPrice=()=>{
-
+  const handleFilterPrice=(option:any)=>{
+    filterOption={
+      ...filterOption,
+      ...option
+    }
+    onChangeOption(filterOption)
   }
   return (
     <Box marginTop="25px">
