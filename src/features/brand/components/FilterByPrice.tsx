@@ -3,7 +3,11 @@ import { CustomMuiButton } from 'components';
 import { FC, useState } from 'react';
 import { marks } from '../brand';
 
-const FilterByPrice: FC = (onFilterPrice) => {
+export interface FilterByPriceProps {
+  onFilterPrice:(id:any)=>void
+}
+
+const FilterByPrice: FC<FilterByPriceProps> = ({onFilterPrice}) => {
   const [value, setValue] = useState<number[]>([0, 3000000]);
 
   const valueText = (value: number) => {
