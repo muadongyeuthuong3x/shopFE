@@ -6,6 +6,8 @@ import { AuthEnumsPath, RegisterPayload, registerSchema } from 'features/auth/au
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import axios from 'axios';
 
 export interface RegisterFormProps {
   initialValues?: RegisterPayload;
@@ -18,10 +20,33 @@ const RegisterForm: FC<RegisterFormProps> = ({ initialValues, onSubmit }) => {
     resolver: yupResolver(registerSchema),
   });
 
-  const handleFormSubmit = (formValues: RegisterPayload) => {
+  const handleFormSubmit = async (formValues: RegisterPayload) => {
     formValues.fullName = `${formValues.firstName} ${formValues.lastName}`;
-    delete formValues.confirmPassword;
-    console.log(formValues);
+    // delete formValues.confirmPassword;
+    console.log(formValues)
+    try {
+
+      var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+      if (vnf_regex.test(formValues.phoneNumber) == false) {
+        toast.error("Số điện thoại không hợp lệ")
+      } else if (formValues.password !== formValues.confirmPassword) {
+
+      } else {
+        const form = {
+
+          address: formValues.address,
+          email: formValues.email,
+          fullName: formValues.fullName,
+          password: formValues.password,
+          phoneNumber: formValues.phoneNumber
+        }
+
+        const res: any = await axios.post("http://localhost:5000/api/auth/register", form)
+        toast.success(res.data.message)
+      }
+    } catch (error: any) {
+      toast.error(error.response.data.message)
+    }
   };
 
   return (

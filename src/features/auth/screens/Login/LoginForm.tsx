@@ -32,7 +32,6 @@ const LoginForm: FC<LoginFormProps> = ({ initialValues, onSubmit }) => {
       LocalStorage.setItem(keyUser, JSON.stringify(data.data.message));
       window.location.href = "http://localhost:3000";
     } catch (error:any) {
-      console.log(error.response.data.message)
       toast.error(error.response.data.message)
     }
   };
