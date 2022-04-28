@@ -3,8 +3,8 @@ import { CustomMuiButton } from 'components';
 import { FC, useState } from 'react';
 import { marks } from '../brand';
 
-const FilterByPrice: FC = () => {
-  const [value, setValue] = useState<number[]>([0, 80]);
+const FilterByPrice: FC = (onFilterPrice) => {
+  const [value, setValue] = useState<number[]>([0, 3000000]);
 
   const valueText = (value: number) => {
     return `$${value}`;
@@ -29,7 +29,7 @@ const FilterByPrice: FC = () => {
         valueLabelDisplay="auto"
         getAriaValueText={valueText}
         marks={marks}
-        max={50000000}
+        max={20000000}
         color="secondary"
         sx={{ marginLeft: '10px' }}
       />

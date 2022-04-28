@@ -25,25 +25,22 @@ export const marks = [
     value: 0,
     label: '0',
   },
+
   {
-    value: 60,
-    label: '60',
+    value: 3000000,
+    label: '3tr',
   },
   {
-    value: 80,
-    label: '80',
+    value: 6000000,
+    label: '5tr',
   },
   {
-    value: 100,
-    label: '100',
+    value: 15000000,
+    label: '15tr',
   },
   {
-    value: 150,
-    label: '150',
-  },
-  {
-    value: 50000000,
-    label: '50 000 000',
+    value: 20000000,
+    label: '20tr',
   },
 ];
 

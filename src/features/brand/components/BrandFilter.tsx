@@ -49,13 +49,17 @@ const BrandFilter: FC<Prop> = ({onChangeOption}) => {
     }
     onChangeOption(filterOption)
   }
+
+  const handleFilterPrice=()=>{
+
+  }
   return (
     <Box marginTop="25px">
       <BrandFilterWidget title="Loại">
         <FilterByType options={data} onSelect={handleSelectType} />
       </BrandFilterWidget>
       <BrandFilterWidget title="Giá">
-        <FilterByPrice />
+        <FilterByPrice onFilterPrice={handleFilterPrice} />
       </BrandFilterWidget>
       <BrandFilterWidget title="Size">
         <FilterBySize options={sizeOptions} />
