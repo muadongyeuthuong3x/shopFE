@@ -4,6 +4,7 @@ import React, { FC } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import RouterWrapper from 'routes/RouterWrapper';
 import { themeOptions } from 'styles/theme';
+import 'react-toastify/dist/ReactToastify.css';
 
 const theme = createTheme(themeOptions);
 

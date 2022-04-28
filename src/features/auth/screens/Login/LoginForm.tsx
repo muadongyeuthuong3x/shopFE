@@ -5,7 +5,11 @@ import { InputField, PasswordField } from 'components';
 import { AuthEnumsPath, LoginPayload, loginSchema } from 'features/auth/auth';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
+import { ToastContainer, toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import { LocalKey, LocalStorage } from "ts-localstorage";
+import { STORAGE_KEY } from 'constants/storage/storage';
+import axios from 'axios';
 
 export interface LoginFormProps {
   initialValues?: LoginPayload;
@@ -18,7 +22,23 @@ const LoginForm: FC<LoginFormProps> = ({ initialValues, onSubmit }) => {
     resolver: yupResolver(loginSchema),
   });
 
-  const handleFormSubmit = (formValues: LoginPayload) => {};
+  const handleFormSubmit = async (formValues: LoginPayload) => {
+    try {
+      const data: any = await axios.post("http://localhost:5000/api/auth/login", formValues)
+
+      if (data.data.message.role === "Admin") {
+
+        window.location.href = "http://localhost:3000";
+      } 
+      const key = new LocalKey(STORAGE_KEY.TOKEN, "");
+      const keyUser = new LocalKey(STORAGE_KEY.USER, "");
+      LocalStorage.setItem(key, JSON.stringify(data.data.message.token));
+      LocalStorage.setItem(keyUser, JSON.stringify(data.data.message));
+    } catch (error:any) {
+      console.log(error.response.data.message)
+      toast.error(error.response.data.message)
+    }
+  };
 
   return (
     <Box width="500px" padding="50px" margin="auto">
@@ -96,6 +116,10 @@ const LoginForm: FC<LoginFormProps> = ({ initialValues, onSubmit }) => {
           <Link to={AuthEnumsPath.REGISTER}>Đăng ký ngay</Link>
         </Box>
       </Box>
+      <ToastContainer
+position="top-right"
+autoClose={3000}
+closeOnClick/>
     </Box>
   );
 };
