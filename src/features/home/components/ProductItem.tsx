@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import { Product } from '../../../constants';
 import { ProductItemControl } from '../home';
 import ProductSlider from './ProductSlider';
+import { ToastContainer, toast } from 'react-toastify';
+import { LocalKey, LocalStorage } from "ts-localstorage";
 
 export interface ProductItemProps {
   productList?: Product[];
@@ -50,7 +52,10 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
+ 
+  const addItemCard = ()=>{
 
+  }
   return (
     <>
       <Grid container spacing={3}>
@@ -140,7 +145,7 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
                       boxShadow="0 3px 10px rgb(0 0 0 / 8%)"
                       transition=".3s"
                       margin="0 10px"
-                      onClick={handleOpenModal}
+                      onClick={addItemCard}
                     >
                       <Search />
                     </CustomMuiIconButton>

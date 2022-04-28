@@ -26,14 +26,11 @@ const LoginForm: FC<LoginFormProps> = ({ initialValues, onSubmit }) => {
     try {
       const data: any = await axios.post("http://localhost:5000/api/auth/login", formValues)
 
-      if (data.data.message.role === "Admin") {
-
-        window.location.href = "http://localhost:3000";
-      } 
       const key = new LocalKey(STORAGE_KEY.TOKEN, "");
       const keyUser = new LocalKey(STORAGE_KEY.USER, "");
       LocalStorage.setItem(key, JSON.stringify(data.data.message.token));
       LocalStorage.setItem(keyUser, JSON.stringify(data.data.message));
+      window.location.href = "http://localhost:3000";
     } catch (error:any) {
       console.log(error.response.data.message)
       toast.error(error.response.data.message)
