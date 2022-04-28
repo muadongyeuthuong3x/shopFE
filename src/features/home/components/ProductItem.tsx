@@ -54,7 +54,7 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
   return (
     <>
       <Grid container spacing={3}>
-        {data?.map((product) => (
+        {productList?.map((product) => (
           <Fragment key={product.id}>
             <Grid
               item
@@ -74,7 +74,7 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
                   },
                 }}
               >
-                <ProductSlider />
+                <ProductSlider imageList={product.image} />
                 <Box
                   position="absolute"
                   right={0}
@@ -183,7 +183,7 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
           </Fragment>
         ))}
       </Grid>
-      <ProductModal open={openModal} onCloseModal={handleCloseModal} product={data[0]} />
+      {/* <ProductModal open={openModal} onCloseModal={handleCloseModal} product={data[0]} /> */}
     </>
   );
 };

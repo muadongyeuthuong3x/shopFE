@@ -34,6 +34,7 @@ const ProductModal: FC<ProductModalProps> = ({ open, onCloseModal, product }) =>
               direction="horizontal"
               width="100%"
               height="100%"
+              imageList={product?.image}
             />
           </Grid>
           <Grid item xl={6} lg={6} md={6}>

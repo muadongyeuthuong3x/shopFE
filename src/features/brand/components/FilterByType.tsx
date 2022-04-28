@@ -4,9 +4,13 @@ import { Brand } from '../../../constants';
 
 export interface FilterByTypeProps {
   options: Brand[];
+  onSelect:(id:any)=>void
 }
 
-const FilterByType: FC<FilterByTypeProps> = ({ options }) => {
+const FilterByType: FC<FilterByTypeProps> = ({ options, onSelect }) => {
+  const handleSelect=(id:any)=>{
+    onSelect(id)
+  }
   return (
     <FormControl component="fieldset">
       <RadioGroup name="type">
@@ -16,6 +20,7 @@ const FilterByType: FC<FilterByTypeProps> = ({ options }) => {
             value={option.id}
             control={<Radio color="secondary" />}
             label={option?.name}
+            onChange={()=>handleSelect(option.id)}
           />
         ))}
       </RadioGroup>

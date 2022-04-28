@@ -13,7 +13,7 @@ export interface ProductSliderProps {
 }
 
 const ProductSlider: FC<ProductSliderProps> = ({
-  imageList,
+  imageList=[],
   flexDirection = 'row-reverse',
   direction = 'vertical',
   width = 'calc(100% - 107px)',
@@ -25,7 +25,7 @@ const ProductSlider: FC<ProductSliderProps> = ({
     <Box display="flex" flexDirection={flexDirection} justifyContent="space-between" height="100%">
       <Box height={height} width={width}>
         <Swiper modules={[Thumbs]} grabCursor={true} thumbs={{ swiper: activeThumb }} loop={true}>
-          {productImages.map((image, index) => (
+          {imageList?.map((image, index) => (
             <SwiperSlide key={index}>
               <img
                 src={image}
@@ -48,7 +48,7 @@ const ProductSlider: FC<ProductSliderProps> = ({
           direction={direction}
           spaceBetween={20}
         >
-          {productImages.map((image, index) => (
+          {imageList.map((image, index) => (
             <SwiperSlide key={index} className="product-detail-slider-item">
               <img src={image} alt="product-detail-item" />
             </SwiperSlide>

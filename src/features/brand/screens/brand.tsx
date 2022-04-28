@@ -1,19 +1,40 @@
 import { Box, Breadcrumbs, Container, Pagination, Typography } from '@mui/material';
+import { api } from 'api/api';
 import ProductItem from 'features/home/components/ProductItem';
 import { HomeEnumPath } from 'features/home/home';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import BrandColumn from '../components/BrandColumn';
-import BrandFilter from '../components/BrandFilter';
+import BrandFilter, { FilterOption } from '../components/BrandFilter';
 import BrandSort from '../components/BrandSort';
 
+let optionFilterQuery= ''
 const BrandPage: FC = () => {
   const [productColumn, setProductColumn] = useState<number>(4);
-
+  const [data, setData] = useState([]);
+  const [filterOption, setFilterOption]= useState<FilterOption>({});
   const handleUpdateProductColumn = (value: number) => {
     setProductColumn(value);
   };
 
+  useEffect(()=>{
+    const getData= async()=>{
+      const res =await api.get(`product/all?typeId=${filterOption?.typeId}`);
+      const convertDataType= res.data.products.rows.map((obj: any) => ({
+        ...obj,
+        name: obj.productName, 
+        price:obj.productPrice,
+        image: obj.image.split(',')
+      }))
+      setData(convertDataType)
+    }
+    getData();
+  },[filterOption]);
+
+  const handleChangeOption=(option: FilterOption)=>{
+    setFilterOption(option)
+    console.log(option)
+  }
   return (
     <Box>
       <Box
@@ -46,7 +67,7 @@ const BrandPage: FC = () => {
       <Container maxWidth="xl">
         <Box sx={{ paddingBottom: '68px' }} display="flex" justifyContent="space-between">
           <Box width="320px">
-            <BrandFilter />
+            <BrandFilter onChangeOption={handleChangeOption} />
           </Box>
           <Box
             width="calc(100% - 370px)"
@@ -62,7 +83,7 @@ const BrandPage: FC = () => {
               />
               <BrandSort />
             </Box>
-            <ProductItem productColumn={productColumn} />
+            <ProductItem productColumn={productColumn} productList={data} />
             <Box
               marginTop="40px"
               width="100%"

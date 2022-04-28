@@ -7,13 +7,12 @@ export interface ProductSliderProps {
   imageList?: string[];
 }
 
-const ProductSlider: FC<ProductSliderProps> = ({ imageList }) => {
+const ProductSlider: FC<ProductSliderProps> = ({ imageList=[] }) => {
   const [activeThumb, setActiveThumb] = useState<any>();
-
   return (
     <>
       <Swiper modules={[Thumbs]} loop={true} grabCursor={true} thumbs={{ swiper: activeThumb }}>
-        {productImages.map((image, index) => (
+        {imageList?.map((image, index) => (
           <SwiperSlide key={index}>
             <img src={image} alt="home-product" width="100%" height="100%" />
           </SwiperSlide>
