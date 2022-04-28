@@ -1,5 +1,5 @@
 import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Brand } from '../../../constants';
 
 export interface FilterByTypeProps {
@@ -8,9 +8,14 @@ export interface FilterByTypeProps {
 }
 
 const FilterByType: FC<FilterByTypeProps> = ({ options, onSelect }) => {
+
+  useEffect(()=>{
+    onSelect(options[0]?.id)
+  },[options])
   const handleSelect=(id:any)=>{
     onSelect(id)
   }
+  
   return (
     <FormControl component="fieldset">
       <RadioGroup name="type">

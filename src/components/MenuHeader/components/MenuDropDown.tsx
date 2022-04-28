@@ -60,12 +60,12 @@ const MenuDropDown: FC<MenuDropDownProps> = ({ open, brands }) => {
               },
             })}
           >
-            <Link to={brand.slug}>
+            <Link to={`/brand${brand.slug}-${brand.id}`}>
               <Typography variant="body1" textTransform="capitalize" fontWeight={600}>
                 {brand.name}
               </Typography>
               {/* để tạm để hiển thị */}
-              <img src={brand.image.type} width="100%" alt={brand.name} />{' '}
+              <img src={brand.image} width="100%" alt={brand.name} />{' '}
               {/* <img src={brand.image} width="100%" alt={brand.name} /> */}
             </Link>
           </ListItem>

@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import { api } from 'api/api';
 import { FC, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { sizeOptions, type } from '../brand';
 import BrandFilterWidget from './BrandFilterWidget';
 import FilterByPrice from './FilterByPrice';
@@ -13,7 +14,9 @@ export interface FilterOption {
   price?: {
     priceMin: number,
     priceMax: number
-  }
+  },
+  limit?:number,
+  page?:number
 }
 
 export interface Prop {
@@ -23,20 +26,20 @@ export interface Prop {
 const BrandFilter: FC<Prop> = ({onChangeOption}) => {
   const [data, setData] = useState([]);
   let filterOption:FilterOption={};
-  
+  const path:any= useParams();
+  const brandId= path?.slug.split('-')[path?.slug.split('-').length-1];
+
   useEffect(()=>{
     const getData= async()=>{
-      const res =await api.get('brand/all');
-      console.log(res)
-      const convertDataType= res.data.brands.rows.map((obj: any) => ({
+      const res =await api.get(`type/all?brandId=${brandId}`);
+      const convertDataType= res?.data?.types?.rows?.map((obj: any) => ({
         ...obj,
-        name: obj.brandName, 
-        image: obj.image.split(',')
+        name: obj.typeName, 
       }))
-      console.log(convertDataType)
       setData(convertDataType)
     }
     getData();
+   
   },[])
 
   const handleSelectType=(id:any)=>{

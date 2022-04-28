@@ -42,8 +42,8 @@ export const marks = [
     label: '150',
   },
   {
-    value: 200,
-    label: '200',
+    value: 50000000,
+    label: '50 000 000',
   },
 ];
 

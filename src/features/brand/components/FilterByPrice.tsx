@@ -4,7 +4,7 @@ import { FC, useState } from 'react';
 import { marks } from '../brand';
 
 const FilterByPrice: FC = () => {
-  const [value, setValue] = useState<number[]>([0, 60]);
+  const [value, setValue] = useState<number[]>([0, 80]);
 
   const valueText = (value: number) => {
     return `$${value}`;
@@ -29,7 +29,7 @@ const FilterByPrice: FC = () => {
         valueLabelDisplay="auto"
         getAriaValueText={valueText}
         marks={marks}
-        max={200}
+        max={50000000}
         color="secondary"
         sx={{ marginLeft: '10px' }}
       />

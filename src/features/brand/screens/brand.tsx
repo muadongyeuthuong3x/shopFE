@@ -17,9 +17,12 @@ const BrandPage: FC = () => {
     setProductColumn(value);
   };
 
+  const changPage=(event:any,page:number)=>{
+    setFilterOption({...filterOption, page})
+  }
   useEffect(()=>{
     const getData= async()=>{
-      const res =await api.get(`product/all?typeId=${filterOption?.typeId}`);
+      const res =await api.get(`product/all?limit=8&&typeId=${filterOption?.typeId} ${filterOption?.page?`&&page=${filterOption?.page-1}`:'' }`);
       const convertDataType= res.data.products.rows.map((obj: any) => ({
         ...obj,
         name: obj.productName, 
@@ -32,7 +35,7 @@ const BrandPage: FC = () => {
   },[filterOption]);
 
   const handleChangeOption=(option: FilterOption)=>{
-    setFilterOption(option)
+    setFilterOption({...option,page:1})
     console.log(option)
   }
   return (
@@ -99,7 +102,7 @@ const BrandPage: FC = () => {
                 },
               })}
             >
-              <Pagination color="secondary" count={5} />
+              <Pagination page={filterOption?.page} color="secondary" onChange={changPage} count={Math.floor(data?.length/8)+1} />
             </Box>
           </Box>
         </Box>
