@@ -5,7 +5,9 @@ import { PasswordField } from 'components/FormElement/PasswordField';
 import { AuthEnumsPath, RecoverPasswordPayload, recoverPasswordSchema } from 'features/auth/auth';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import axios from 'axios';
 
 export interface RecoverPasswordFormProps {
   initialValues?: RecoverPasswordPayload;
@@ -17,9 +19,17 @@ const RecoverPasswordForm: FC<RecoverPasswordFormProps> = ({ initialValues, onSu
     defaultValues: initialValues,
     resolver: yupResolver(recoverPasswordSchema),
   });
-
-  const handleFormSubmit = (formValues: RecoverPasswordPayload) => {
-    
+   const {token}:any = useParams()
+  const handleFormSubmit = async(formValues: RecoverPasswordPayload) => {
+    try {
+      const form = {
+        passwordNew:formValues.password
+      }
+      const res = await axios.post(`http://localhost:5000/api/auth/update-password/${token}`, form)
+      toast.success(res.data.message)
+    } catch (error:any) {
+      toast.error(error.response.data.message)
+    } 
   };
 
   return (
