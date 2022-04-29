@@ -18,7 +18,9 @@ const RecoverPasswordForm: FC<RecoverPasswordFormProps> = ({ initialValues, onSu
     resolver: yupResolver(recoverPasswordSchema),
   });
 
-  const handleFormSubmit = (formValues: RecoverPasswordPayload) => {};
+  const handleFormSubmit = (formValues: RecoverPasswordPayload) => {
+    
+  };
 
   return (
     <Box width="500px" padding="50px" margin="auto">

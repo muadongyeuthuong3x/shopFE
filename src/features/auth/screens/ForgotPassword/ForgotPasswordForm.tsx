@@ -7,6 +7,8 @@ import { AuthEnumsPath, ForgotPasswordPayload, forgotPasswordSchema } from 'feat
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import axios from 'axios';
 
 export interface ForgotPasswordFormProps {
   initialValues?: ForgotPasswordPayload;
@@ -19,7 +21,15 @@ const ForgotPasswordForm: FC<ForgotPasswordFormProps> = ({ initialValues, onSubm
     resolver: yupResolver(forgotPasswordSchema),
   });
 
-  const handleFormSubmit = (formValues: ForgotPasswordPayload) => {};
+  const handleFormSubmit = async(formValues: ForgotPasswordPayload) => {
+    try {
+      
+      const res = await axios.post("http://localhost:5000/api/auth/forgot-password", formValues)
+      toast.success(res.data.message)
+    } catch (error:any) {
+      toast.error(error.response.data.message)
+    }
+  };
 
   return (
     <Box width="500px" padding="50px" margin="auto">
