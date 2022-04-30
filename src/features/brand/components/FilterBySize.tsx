@@ -3,23 +3,50 @@ import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
 import * as React from 'react';
 import { FC } from 'react';
+import { api } from 'api/api';
 
 export interface FilterBySizeProps {
-  options: number[];
+  onFilterSize: (arrSizeId: number[])=>void;
 }
 
-const FilterBySize: FC<FilterBySizeProps> = ({ options }) => {
-  const handleChange = () => {};
+export interface Isize {
+    id: number,
+    sizeNumber:String,
+}
+
+const FilterBySize: FC<FilterBySizeProps> = ({ onFilterSize }) => {
+  const [sizes, setSizes] = React.useState<Isize[]>([]);
+  const [selected, setSelected] = React.useState<number[]>([]);
+  
+  React.useEffect(()=>{
+    const getAllSize= async()=>{
+      const res = await api.get('size/all');
+   
+      setSizes(res?.data?.sizes?.rows)
+    }
+    getAllSize();
+  },[])
+    const handleSelected = (e:any) => {
+    const selectEdSizeId= +e.target.value;
+    
+    const checkExit= selected.includes(selectEdSizeId);
+    checkExit? setSelected( (pre:number[])=>pre.filter(i=>i!=selectEdSizeId)):
+    setSelected( (pre:number[])=>[...pre, selectEdSizeId])
+    onFilterSize(selected)
+  };
 
   return (
     <FormControl component="fieldset" variant="standard">
       <FormGroup sx={{ flexDirection: 'row' }}>
-        {options.map((item) => (
+        {sizes.map((item) => (
           <FormControlLabel
             sx={{ marginLeft: 0, marginRight: 0 }}
-            key={item}
+            key={item.id}
             control={
               <Checkbox
+                checked={selected.includes(item.id)}
+                onClick={handleSelected}
+                value={item.id}
                 sx={(theme) => ({
                   display: 'none',
                   '& + span': {
@@ -41,7 +68,7 @@ const FilterBySize: FC<FilterBySizeProps> = ({ options }) => {
                 })}
               />
             }
-            label={item}
+            label={item.sizeNumber+''}
           />
         ))}
       </FormGroup>

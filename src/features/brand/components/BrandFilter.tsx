@@ -10,7 +10,7 @@ import FilterByType from './FilterByType';
 
 export interface FilterOption {
   typeId?: number;
-  sizes?: String[],
+  sizes?: number[],
     priceMin?: number,
     priceMax?: number
   limit?:number,
@@ -55,6 +55,15 @@ const BrandFilter: FC<Prop> = ({onChangeOption}) => {
     }
     onChangeOption(filterOption)
   }
+  
+  const handleFilterSize=(arrSizeId:number[])=>{
+    filterOption={
+      ...filterOption,
+      sizes:arrSizeId
+    }
+    onChangeOption(filterOption)
+  }
+
   return (
     <Box marginTop="25px">
       <BrandFilterWidget title="Loại">
@@ -64,7 +73,7 @@ const BrandFilter: FC<Prop> = ({onChangeOption}) => {
         <FilterByPrice onFilterPrice={handleFilterPrice} />
       </BrandFilterWidget>
       <BrandFilterWidget title="Size">
-        <FilterBySize options={sizeOptions} />
+        <FilterBySize onFilterSize={handleFilterSize} />
       </BrandFilterWidget>
     </Box>
   );

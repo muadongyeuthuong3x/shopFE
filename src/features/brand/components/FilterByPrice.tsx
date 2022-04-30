@@ -20,8 +20,8 @@ const FilterByPrice: FC<FilterByPriceProps> = ({onFilterPrice}) => {
 
   const handleSubmit = () => {
     onFilterPrice({
-      priceMax:value[0],
-      priceMin: value[1]
+      priceMax:value[0]> value[1]?value[0]:value[1],
+      priceMin: value[1]< value[0]?value[1]:value[0]
     })
   };
 
