@@ -10,7 +10,6 @@ import {
 } from '@mui/material';
 import { CustomMuiButton } from 'components';
 import { FC } from 'react';
-import { cart } from '../helpers/example.data';
 import CartTableItem from './CartTableItem';
 
 const CartTableList: FC = () => {
@@ -37,7 +36,7 @@ const CartTableList: FC = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          <CartTableItem productList={cart} />
+          <CartTableItem  />
         </TableBody>
       </Table>
       <Box display="flex" mt={4} justifyContent="flex-end" width="50%" marginLeft="auto">

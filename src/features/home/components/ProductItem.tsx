@@ -52,10 +52,41 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
- 
-  const addItemCard = ()=>{
 
+  const FcLocalStrogate = (data: any) => {
+    const dataLocal: any = [];
+    const key = new LocalKey("card", "");
+    const dataLC: any = LocalStorage.getItem(key);
+    const a = JSON.parse(dataLC)
+    let check = 0
+    if (dataLC) {
+      a && a?.map((item: any) => {
+        console.log(item.id === data.id)
+        if (item.id === data.id) {
+          item.count += 1
+          check = 1
+          return check
+        } else {
+          check = 2
+          return check
+        }
+      })
+    } else {
+      const dataPush = { ...data, count: 1 };
+      dataLocal.push(dataPush)
+      LocalStorage.setItem(key, JSON.stringify(dataLocal));
+    }
+    if (check === 1) {
+      LocalStorage.setItem(key, JSON.stringify(a));
+      console.log(a)
+    }else if(check ===2){
+      const dataPush = { ...data, count: 1 };
+      a.push(dataPush)
+      LocalStorage.setItem(key, JSON.stringify(a));
+    }
   }
+
+
   return (
     <>
       <Grid container spacing={3}>
@@ -126,6 +157,7 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
                       boxShadow="0 3px 10px rgb(0 0 0 / 8%)"
                       transition=".3s"
                       margin="0 10px"
+                      onClick={() => { FcLocalStrogate(product) }}
                     >
                       <ShoppingBagOutlined />
                     </CustomMuiIconButton>
@@ -145,7 +177,7 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
                       boxShadow="0 3px 10px rgb(0 0 0 / 8%)"
                       transition=".3s"
                       margin="0 10px"
-                      onClick={addItemCard}
+
                     >
                       <Search />
                     </CustomMuiIconButton>

@@ -9,35 +9,35 @@ import {
   Theme,
   Typography,
 } from '@mui/material';
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '../../../constants';
+import { LocalKey, LocalStorage } from "ts-localstorage";
+import { STORAGE_KEY } from 'constants/storage/storage';
 
-export interface CartTableItemProps {
-  productList?: Product[];
-}
 
-const CartTableItem: FC<CartTableItemProps> = ({ productList }) => {
-  const [amount, setAmount] = useState<number[]>(() => {
-    return productList?.map((product) => product.amount) as number[];
-  });
 
+const CartTableItem: FC = () => {
+ 
+  
+  const [productList , setproductList] = useState<any>()
   const total = useMemo(() => {
-    return productList?.reduce((acc, product) => {
-      return acc + (product.price - (product.price * product.discount) / 100) * product.amount;
-    }, 0);
-  }, [productList]);
+    const key = new LocalKey("card", "");
+    const dataLC:any=LocalStorage.getItem(key);
+    const product = JSON.parse(dataLC)
+    setproductList(product)
+  }, []);
 
   return (
     <>
-      {productList?.map((product, index) => (
+      {productList?.map((product:any) => (
         <TableRow
-          key={index}
+          key={product.id}
           sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)', '& > td': { padding: '12px' } }}
         >
           <TableCell sx={{ display: 'flex', borderBottom: 'none' }}>
             <Link to="">
-              <img src={product.image} alt={product.name} width="100px" height="100px" />
+              <img src={product.image[0]} alt={product.name} width="100px" height="100px" />
             </Link>
             <Box
               padding="12px 12px 12px 24px"
@@ -111,7 +111,7 @@ const CartTableItem: FC<CartTableItemProps> = ({ productList }) => {
               </Button>
               <TextField
                 name="amount"
-                value={amount[index]}
+                value={product.count}
                 // onChange={(e) => setAmount(+e.target.value)}
               />
               <Button
@@ -157,7 +157,7 @@ const CartTableItem: FC<CartTableItemProps> = ({ productList }) => {
         </TableCell>
         <TableCell align="center">
           <Typography fontSize="18px" fontWeight={600} color="secondary">
-            {total}
+         
           </Typography>
         </TableCell>
       </TableRow>

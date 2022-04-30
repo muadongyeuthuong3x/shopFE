@@ -39,7 +39,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ initialValues, onSubmit }) => {
           fullName: formValues.fullName,
           password: formValues.password,
           phoneNumber: formValues.phoneNumber,
-          active:1
+          active:1,
         }
 
         const res: any = await axios.post("http://localhost:5000/api/auth/register", form)
