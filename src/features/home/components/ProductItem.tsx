@@ -13,6 +13,7 @@ import { LocalKey, LocalStorage } from "ts-localstorage";
 export interface ProductItemProps {
   productList?: Product[];
   productColumn?: number;
+  a?:any
 }
 
 export const productControl: ProductItemControl[] = [
@@ -47,7 +48,7 @@ const data: Product[] = [
   },
 ];
 
-const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
+const ProductItem: FC<ProductItemProps> = ({ productList, productColumn,a }) => {
   const [openModal, setOpenModal] = useState(false);
 
   const handleOpenModal = () => setOpenModal(true);

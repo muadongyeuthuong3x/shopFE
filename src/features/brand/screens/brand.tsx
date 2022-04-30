@@ -23,7 +23,7 @@ const BrandPage: FC = () => {
   }
   useEffect(()=>{
     const getData= async()=>{
-      const res =await api.get(`product/all?limit=8${filterOption?.typeId?`&&typeId=${filterOption?.typeId}`:'' }${filterOption?.page?`&&page=${filterOption?.page-1}`:'' }${filterOption?.priceMax?`&&priceMax=${filterOption?.priceMax}`:'' }${filterOption?.priceMin?`&&priceMin=${filterOption?.priceMin}`:'' }${filterOption?.sizes?`&&sizeId=${filterOption?.sizes.join(',')}`:'' }`);
+      const res =await api.get(`product/all?limit=8${filterOption?.typeId?`&&typeId=${filterOption?.typeId}`:'' }${filterOption?.page?`&&page=${filterOption?.page-1}`:'' }${filterOption?.priceMax?`&&priceMax=${filterOption?.priceMax}`:'' }${filterOption?.priceMin?`&&priceMin=${filterOption?.priceMin}`:'' }${filterOption?.sizes?.length?`&&sizeId=${filterOption?.sizes.join(',')}`:'' }`);
       const convertDataType= res.data.products.rows.map((obj: any) => ({
         ...obj,
         name: obj.productName, 
@@ -38,7 +38,6 @@ const BrandPage: FC = () => {
 
   const handleChangeOption=(option: FilterOption)=>{
     setFilterOption({...option,page:1})
-    console.log(option)
   }
   return (
     <Box>
