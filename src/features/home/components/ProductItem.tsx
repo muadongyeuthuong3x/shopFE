@@ -145,7 +145,7 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
                       boxShadow="0 3px 10px rgb(0 0 0 / 8%)"
                       transition=".3s"
                       margin="0 10px"
-                      onClick={addItemCard}
+                      onClick={handleOpenModal}
                     >
                       <Search />
                     </CustomMuiIconButton>
