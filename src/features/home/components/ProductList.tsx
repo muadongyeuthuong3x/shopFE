@@ -6,25 +6,40 @@ import ProductItem from './ProductItem';
 import Widget from './Widget';
 
 const ProductList: FC = () => {
-  const [data, setData] = useState([]);
+  const [newProductData, setNewProductData] = useState([]);
+  const [saleProductData, setSaleProductData] = useState([]);
   
   useEffect(()=>{
-    const getData= async()=>{
-      const res =await api.get('product/all');
+    const getNewProduct= async()=>{
+      const res =await api.get('product/all?limit=4');
       const convertDataType= res.data.products.rows.map((obj: any) => ({
         ...obj,
         name: obj.productName, 
         price:obj.productPrice,
         image: obj.image.split(',')
       }))
-      setData(convertDataType)
+      setNewProductData(convertDataType)
     }
-    getData();
+    const getSaleProduct= async()=>{
+      const res =await api.get('product/all?sale=1');
+      const convertDataType= res.data.products.rows.map((obj: any) => ({
+        ...obj,
+        name: obj.productName, 
+        price:obj.productPrice,
+        image: obj.image.split(',')
+      }))
+      setSaleProductData(convertDataType)
+    }
+    getNewProduct();
+    getSaleProduct();
   },[]);
   return (
     <Container maxWidth="xl">
       <Widget title="Sản phẩm mới" buttonTitle="load more">
-        <ProductItem productList={data} />
+        <ProductItem productList={newProductData} />
+      </Widget>
+      <Widget title="Sản giảm giá" buttonTitle="load more">
+        <ProductItem productList={saleProductData} />
       </Widget>
     </Container>
   );

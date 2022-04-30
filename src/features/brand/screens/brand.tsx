@@ -3,13 +3,14 @@ import { api } from 'api/api';
 import ProductItem from 'features/home/components/ProductItem';
 import { HomeEnumPath } from 'features/home/home';
 import { FC, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import BrandColumn from '../components/BrandColumn';
 import BrandFilter, { FilterOption } from '../components/BrandFilter';
 import BrandSort from '../components/BrandSort';
 
 let optionFilterQuery= ''
 const BrandPage: FC = () => {
+  const path:any= useParams();
   const [productColumn, setProductColumn] = useState<number>(4);
   const [data, setData] = useState([]);
   const [filterOption, setFilterOption]= useState<FilterOption>({});
@@ -31,6 +32,7 @@ const BrandPage: FC = () => {
       }))
       setData(convertDataType)
     }
+    if(filterOption?.typeId)
     getData();
   },[filterOption]);
 
@@ -62,8 +64,8 @@ const BrandPage: FC = () => {
         </Typography>
         <Breadcrumbs>
           <Link to={HomeEnumPath.HOMEPAGE}>Trang chủ</Link>
-          <Typography fontWeight={500} variant="body1">
-            Vans
+          <Typography fontWeight={500} variant="body1" style={{textTransform:'capitalize'}}>
+            {path?.slug.split('-')[0]}
           </Typography>
         </Breadcrumbs>
       </Box>
