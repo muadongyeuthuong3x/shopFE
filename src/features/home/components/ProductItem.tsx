@@ -13,6 +13,7 @@ import { LocalKey, LocalStorage } from "ts-localstorage";
 export interface ProductItemProps {
   productList?: Product[];
   productColumn?: number;
+  a?:any
 }
 
 export const productControl: ProductItemControl[] = [
@@ -47,7 +48,7 @@ const data: Product[] = [
   },
 ];
 
-const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
+const ProductItem: FC<ProductItemProps> = ({ productList, productColumn,a }) => {
   const [openModal, setOpenModal] = useState(false);
 
   const handleOpenModal = () => setOpenModal(true);
@@ -84,6 +85,8 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
       a.push(dataPush)
       LocalStorage.setItem(key, JSON.stringify(a));
     }
+    toast.success("Thêm sản phẩm vào giỏ hàng thành công")
+
   }
 
 
@@ -177,7 +180,7 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
                       boxShadow="0 3px 10px rgb(0 0 0 / 8%)"
                       transition=".3s"
                       margin="0 10px"
-
+                      onClick={handleOpenModal}
                     >
                       <Search />
                     </CustomMuiIconButton>

@@ -1,14 +1,21 @@
 import { Box, Button, Typography } from '@mui/material';
-import { FC, memo } from 'react';
+import { FC, memo, useState } from 'react';
 
 export interface WidgetProps {
   title: string;
   children: any;
   buttonTitle?: string;
   buttonOption?: boolean;
+  onShowMore?:(page:number)=>void
 }
 
-const Widget: FC<WidgetProps> = ({ title, children, buttonTitle, buttonOption = true }) => {
+const Widget: FC<WidgetProps> = ({ title, children, buttonTitle, buttonOption = true, onShowMore }) => {
+  const [page,setPage]= useState(1);
+  const handleShowmore=()=>{
+    setPage(pre=>pre+1)
+    if(onShowMore)
+    onShowMore(page)
+  }
   return (
     <Box marginTop="90px">
       <Box textAlign="center">
@@ -55,6 +62,7 @@ const Widget: FC<WidgetProps> = ({ title, children, buttonTitle, buttonOption = 
                 backgroundColor: theme.palette.secondary.main,
               },
             })}
+            onClick={handleShowmore}
           >
             {buttonTitle}
           </Button>

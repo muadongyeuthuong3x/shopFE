@@ -26,7 +26,7 @@ const ProductSlider: FC<ProductSliderProps> = ({ imageList=[] }) => {
         onSwiper={setActiveThumb}
         className="home-product-slider"
       >
-        {productImages.map((image, index) => (
+        {imageList.map((image, index) => (
           <SwiperSlide key={index} className="home-product-slider-item">
             <img src={image} alt="home-product-item" />
           </SwiperSlide>

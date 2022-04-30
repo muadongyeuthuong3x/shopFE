@@ -18,6 +18,7 @@ const FilterBySize: FC<FilterBySizeProps> = ({ onFilterSize }) => {
   const [sizes, setSizes] = React.useState<Isize[]>([]);
   const [selected, setSelected] = React.useState<number[]>([]);
   
+
   React.useEffect(()=>{
     const getAllSize= async()=>{
       const res = await api.get('size/all');
@@ -26,13 +27,16 @@ const FilterBySize: FC<FilterBySizeProps> = ({ onFilterSize }) => {
     }
     getAllSize();
   },[])
-    const handleSelected = (e:any) => {
+
+  React.useEffect(()=>{
+    onFilterSize(selected)
+
+  },[selected])
+  const handleSelected = (e:any) => {
     const selectEdSizeId= +e.target.value;
-    
     const checkExit= selected.includes(selectEdSizeId);
     checkExit? setSelected( (pre:number[])=>pre.filter(i=>i!=selectEdSizeId)):
     setSelected( (pre:number[])=>[...pre, selectEdSizeId])
-    onFilterSize(selected)
   };
 
   return (

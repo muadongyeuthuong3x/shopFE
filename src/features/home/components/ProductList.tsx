@@ -6,25 +6,53 @@ import ProductItem from './ProductItem';
 import Widget from './Widget';
 
 const ProductList: FC = () => {
-  const [data, setData] = useState([]);
+  const [newProductData, setNewProductData] = useState([]);
+  const [saleProductData, setSaleProductData] = useState([]);
+  const [newProductPage, setNewProductPage] = useState(0);
+  const [saleProductPage, setSaleProductPage] = useState(0);
   
   useEffect(()=>{
-    const getData= async()=>{
-      const res =await api.get('product/all');
-      const convertDataType= res.data.products.rows.map((obj: any) => ({
+    const getNewProduct= async()=>{
+      const res =await api.get('product/all?limit=4&&page='+newProductPage);
+      const convertDataType:never[]= res.data.products.rows.map((obj: any) => ({
+        ...obj,
+        name: obj.productName, 
+        price:obj.productPrice,
+        image: obj.image.split(',')
+      }));
+      setNewProductData(pre=>[ ...convertDataType,...pre])
+    }
+   
+    getNewProduct();
+  },[newProductPage]);
+
+  useEffect(()=>{
+    const getSaleProduct= async()=>{
+      const res =await api.get('product/all?sale=1&&page='+saleProductPage);
+      const convertDataType:never[]= res.data.products.rows.map((obj: any) => ({
         ...obj,
         name: obj.productName, 
         price:obj.productPrice,
         image: obj.image.split(',')
       }))
-      setData(convertDataType)
+      setSaleProductData(pre=>[ ...convertDataType,...pre])
     }
-    getData();
-  },[]);
+    getSaleProduct();
+  },[saleProductPage]);
+
+  const showMoreNewProduct=(newProductPage:number)=>{
+    setNewProductPage(newProductPage)
+  }
+  const showMoreSaleProduct=(saleProductPage:number)=>{
+    setSaleProductPage(saleProductPage)
+  }
   return (
     <Container maxWidth="xl">
-      <Widget title="Sản phẩm mới" buttonTitle="load more">
-        <ProductItem productList={data} />
+      <Widget title="Sản phẩm mới" buttonTitle="load more" onShowMore={showMoreNewProduct}>
+        <ProductItem productList={newProductData} />
+      </Widget>
+      <Widget title="Sản giảm giá" buttonTitle="load more"  onShowMore={showMoreSaleProduct}>
+        <ProductItem productList={saleProductData} />
       </Widget>
     </Container>
   );

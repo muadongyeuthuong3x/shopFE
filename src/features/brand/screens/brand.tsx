@@ -3,13 +3,14 @@ import { api } from 'api/api';
 import ProductItem from 'features/home/components/ProductItem';
 import { HomeEnumPath } from 'features/home/home';
 import { FC, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import BrandColumn from '../components/BrandColumn';
 import BrandFilter, { FilterOption } from '../components/BrandFilter';
 import BrandSort from '../components/BrandSort';
 
 let optionFilterQuery= ''
 const BrandPage: FC = () => {
+  const path:any= useParams();
   const [productColumn, setProductColumn] = useState<number>(4);
   const [data, setData] = useState([]);
   const [filterOption, setFilterOption]= useState<FilterOption>({});
@@ -22,7 +23,7 @@ const BrandPage: FC = () => {
   }
   useEffect(()=>{
     const getData= async()=>{
-      const res =await api.get(`product/all?limit=8${filterOption?.typeId?`&&typeId=${filterOption?.typeId}`:'' }${filterOption?.page?`&&page=${filterOption?.page-1}`:'' }${filterOption?.priceMax?`&&priceMax=${filterOption?.priceMax}`:'' }${filterOption?.priceMin?`&&priceMin=${filterOption?.priceMin}`:'' }${filterOption?.sizes?`&&sizeId=${filterOption?.sizes.join(',')}`:'' }`);
+      const res =await api.get(`product/all?limit=8${filterOption?.typeId?`&&typeId=${filterOption?.typeId}`:'' }${filterOption?.page?`&&page=${filterOption?.page-1}`:'' }${filterOption?.priceMax?`&&priceMax=${filterOption?.priceMax}`:'' }${filterOption?.priceMin?`&&priceMin=${filterOption?.priceMin}`:'' }${filterOption?.sizes?.length?`&&sizeId=${filterOption?.sizes.join(',')}`:'' }`);
       const convertDataType= res.data.products.rows.map((obj: any) => ({
         ...obj,
         name: obj.productName, 
@@ -31,12 +32,12 @@ const BrandPage: FC = () => {
       }))
       setData(convertDataType)
     }
+    if(filterOption?.typeId)
     getData();
   },[filterOption]);
 
   const handleChangeOption=(option: FilterOption)=>{
     setFilterOption({...option,page:1})
-    console.log(option)
   }
   return (
     <Box>
@@ -62,8 +63,8 @@ const BrandPage: FC = () => {
         </Typography>
         <Breadcrumbs>
           <Link to={HomeEnumPath.HOMEPAGE}>Trang chủ</Link>
-          <Typography fontWeight={500} variant="body1">
-            Vans
+          <Typography fontWeight={500} variant="body1" style={{textTransform:'capitalize'}}>
+            {path?.slug.split('-')[0]}
           </Typography>
         </Breadcrumbs>
       </Box>
