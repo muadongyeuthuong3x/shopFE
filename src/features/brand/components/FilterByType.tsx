@@ -9,9 +9,9 @@ export interface FilterByTypeProps {
 
 const FilterByType: FC<FilterByTypeProps> = ({ options, onSelect }) => {
 
-  useEffect(()=>{
-    onSelect(options[0]?.id)
-  },[options])
+  // useEffect(()=>{
+  //   onSelect(options[0]?.id)
+  // },[options])
   const handleSelect=(id:any)=>{
     onSelect(id)
   }
@@ -19,6 +19,12 @@ const FilterByType: FC<FilterByTypeProps> = ({ options, onSelect }) => {
   return (
     <FormControl component="fieldset">
       <RadioGroup name="type">
+        <FormControlLabel
+             value='tat-ca'
+             control={<Radio color="secondary" />}
+             label='Tất cả'
+             onChange={()=>handleSelect(null)}
+          />
         {options.map((option) => (
           <FormControlLabel
             key={option.id}
