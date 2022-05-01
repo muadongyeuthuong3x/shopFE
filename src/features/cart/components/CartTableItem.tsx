@@ -12,27 +12,44 @@ import {
 import { FC, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '../../../constants';
+import {toast} from 'react-toastify';
 import { LocalKey, LocalStorage } from "ts-localstorage";
-import { STORAGE_KEY } from 'constants/storage/storage';
 
 
+export interface CartTableItemProps {
+  productList?: Product[];
+}
 
 const CartTableItem: FC = () => {
- 
-  
-  const [productList , setproductList] = useState<any>()
-  const total = useMemo(() => {
-    const key = new LocalKey("card", "");
-    const dataLC:any=LocalStorage.getItem(key);
-    const product = JSON.parse(dataLC)
-    setproductList(product)
-  }, []);
 
+  const [productList  , setproductList] = useState<any>([])
+ 
+  useEffect(() => {
+    const key = new LocalKey("card", "");
+     const dataLC: any = LocalStorage.getItem(key);
+     const count:any= JSON.parse(dataLC)
+     setproductList(count)
+  }, [productList]);
+
+  const deletItemCard = (id:number)=>{
+    const key = new LocalKey("card", "");
+    const dataLC: any = LocalStorage.getItem(key);
+    const count:any= JSON.parse(dataLC)
+    const dataNewAfterDelete = count.filter((item:any)=>item.id!=id)
+    if(dataNewAfterDelete.length >0){
+      LocalStorage.setItem(key ,JSON.stringify(dataNewAfterDelete));
+    }else{
+      LocalStorage.removeItem(key);
+    }
+  
+    toast.error("Xóa sản phẩm thành công ")
+    setproductList(dataNewAfterDelete)
+  }
   return (
     <>
-      {productList?.map((product:any) => (
+      {productList?.map((product:any , index:number) => (
         <TableRow
-          key={product.id}
+          key={index}
           sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)', '& > td': { padding: '12px' } }}
         >
           <TableCell sx={{ display: 'flex', borderBottom: 'none' }}>
@@ -140,7 +157,7 @@ const CartTableItem: FC = () => {
             </Typography>
           </TableCell>
           <TableCell align="center">
-            <IconButton>
+          <IconButton onClick={()=>deletItemCard(product.id)}>
               <Delete />
             </IconButton>
           </TableCell>
@@ -157,7 +174,7 @@ const CartTableItem: FC = () => {
         </TableCell>
         <TableCell align="center">
           <Typography fontSize="18px" fontWeight={600} color="secondary">
-         
+           
           </Typography>
         </TableCell>
       </TableRow>

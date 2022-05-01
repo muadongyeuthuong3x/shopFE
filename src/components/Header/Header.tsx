@@ -23,6 +23,7 @@ import {
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { RootState } from 'app/store';
+
 import Logo from 'assets/image/logo.png';
 import { InputField } from 'components/FormElement/InputField';
 import MenuHeader from 'components/MenuHeader/MenuHeader';
@@ -38,6 +39,8 @@ import * as yup from 'yup';
 const schema = yup.object().shape({
   keyword: yup.string().required('Vui lòng nhập tên giày'),
 });
+
+
 
 export const Header: FC = () => {
   const [scroll, setScroll] = useState<boolean>(false);
@@ -56,11 +59,13 @@ export const Header: FC = () => {
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
-
+  
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+   
+
 
   const handleScroll = () => {
     if (window.scrollY === 0) {
@@ -91,7 +96,7 @@ export const Header: FC = () => {
     setOpenDrawer(false);
   };
 
-  const handleSearch = (values: any) => {};
+  const handleSearch = (values: any) => { };
 
   return (
     <>
@@ -129,6 +134,7 @@ export const Header: FC = () => {
                   color: theme.palette.primary.contrastText,
                 })}
               />
+
             </IconButton>
             <IconButton onClick={() => history.push(FavoriteEnumPath.FAVORITE)}>
               <FavoriteBorder
@@ -136,6 +142,7 @@ export const Header: FC = () => {
                   color: theme.palette.primary.contrastText,
                 })}
               />
+
             </IconButton>
             <IconButton onClick={() => history.push(CartEnumPath.CART)}>
               <ShoppingBagOutlined
@@ -148,54 +155,56 @@ export const Header: FC = () => {
         </Container>
       </AppBar>
 
-      {userInfor && (
-        <Menu
-          anchorEl={anchorEl}
-          id="account-menu"
-          open={open}
-          onClose={handleClose}
-          onClick={handleClose}
-          PaperProps={{
-            elevation: 0,
-            sx: {
-              overflow: 'visible',
-              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-              mt: 1.5,
-              '& .MuiAvatar-root': {
-                width: 32,
-                height: 32,
-                ml: -0.5,
-                mr: 1,
+      {
+        userInfor && (
+          <Menu
+            anchorEl={anchorEl}
+            id="account-menu"
+            open={open}
+            onClose={handleClose}
+            onClick={handleClose}
+            PaperProps={{
+              elevation: 0,
+              sx: {
+                overflow: 'visible',
+                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                mt: 1.5,
+                '& .MuiAvatar-root': {
+                  width: 32,
+                  height: 32,
+                  ml: -0.5,
+                  mr: 1,
+                },
+                '&:before': {
+                  content: '""',
+                  display: 'block',
+                  position: 'absolute',
+                  top: 0,
+                  right: 14,
+                  width: 10,
+                  height: 10,
+                  bgcolor: 'background.paper',
+                  transform: 'translateY(-50%) rotate(45deg)',
+                  zIndex: 0,
+                },
               },
-              '&:before': {
-                content: '""',
-                display: 'block',
-                position: 'absolute',
-                top: 0,
-                right: 14,
-                width: 10,
-                height: 10,
-                bgcolor: 'background.paper',
-                transform: 'translateY(-50%) rotate(45deg)',
-                zIndex: 0,
-              },
-            },
-          }}
-          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-        >
-          <MenuItem onClick={() => history.push(AuthEnumsPath.CHANGE_INFORMATION)}>
-            <Avatar /> Profile
-          </MenuItem>
-          <Divider />
-          <MenuItem onClick={handleLogout}>
-            <ListItemIcon>
-              <Logout fontSize="small" />
-            </ListItemIcon>
-            Logout
-          </MenuItem>
-        </Menu>
-      )}
+            }}
+            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          >
+            <MenuItem onClick={() => history.push(AuthEnumsPath.CHANGE_INFORMATION)}>
+              <Avatar /> Profile
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleLogout}>
+              <ListItemIcon>
+                <Logout fontSize="small" />
+              </ListItemIcon>
+              Logout
+            </MenuItem>
+          </Menu>
+        )
+      }
       <Drawer anchor="right" open={openDrawer} onClose={handleCloseDrawer} variant="temporary">
         <Box
           component="form"
