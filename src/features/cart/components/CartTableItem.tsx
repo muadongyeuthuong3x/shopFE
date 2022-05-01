@@ -12,7 +12,7 @@ import {
 import { FC, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '../../../constants';
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
 import { LocalKey, LocalStorage } from "ts-localstorage";
 
 
@@ -22,32 +22,64 @@ export interface CartTableItemProps {
 
 const CartTableItem: FC = () => {
 
-  const [productList  , setproductList] = useState<any>([])
- 
+  const [productList, setproductList] = useState<any>([])
+  const [total, setTotal] = useState<any>(0)
   useEffect(() => {
     const key = new LocalKey("card", "");
-     const dataLC: any = LocalStorage.getItem(key);
-     const count:any= JSON.parse(dataLC)
-     setproductList(count)
+    const dataLC: any = LocalStorage.getItem(key);
+    const count: any = JSON.parse(dataLC)
+    setproductList(count)
+    moneyTotal()
   }, [productList]);
 
-  const deletItemCard = (id:number)=>{
+
+  const moneyTotal = () => {
     const key = new LocalKey("card", "");
     const dataLC: any = LocalStorage.getItem(key);
-    const count:any= JSON.parse(dataLC)
-    const dataNewAfterDelete = count.filter((item:any)=>item.id!=id)
-    if(dataNewAfterDelete.length >0){
-      LocalStorage.setItem(key ,JSON.stringify(dataNewAfterDelete));
-    }else{
+    const a: any = JSON.parse(dataLC)
+    let count = 0;
+    for (var i = 0; i < a.length; i++) {
+      count += (a[i].price - ((a[i].price * a[i].discount) / 100)) * a[i].count
+    }
+    setTotal(count)
+  }
+
+  const deletItemCard = (id: number) => {
+    const key = new LocalKey("card", "");
+    const dataLC: any = LocalStorage.getItem(key);
+    const count: any = JSON.parse(dataLC)
+    const dataNewAfterDelete = count.filter((item: any) => item.id != id)
+    if (dataNewAfterDelete.length > 0) {
+      LocalStorage.setItem(key, JSON.stringify(dataNewAfterDelete));
+    } else {
       LocalStorage.removeItem(key);
     }
-  
+
     toast.error("Xóa sản phẩm thành công ")
     setproductList(dataNewAfterDelete)
   }
+
+  const setDataCard = (index: number, b: boolean) => {
+    const key = new LocalKey("card", "");
+    const dataLC: any = LocalStorage.getItem(key);
+    const a: any = JSON.parse(dataLC)
+    for (var i = 0 ; i< a.length ; i++) {
+      if( i==index && a[index].count == 1 && b == false){
+        toast.error("Sản phẩm mua nhỏ nhất là 1 ")
+      }
+      else  if( i==index &&a[index].count > 1 && b == false){
+        a[index].count -=1
+        LocalStorage.setItem(key, JSON.stringify(a));}
+        else  if( i==index && b == true){
+        a[index].count +=1
+        LocalStorage.setItem(key, JSON.stringify(a));
+      }
+    }
+  }
+
   return (
     <>
-      {productList?.map((product:any , index:number) => (
+      {productList?.map((product: any, index: number) => (
         <TableRow
           key={index}
           sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)', '& > td': { padding: '12px' } }}
@@ -122,14 +154,14 @@ const CartTableItem: FC = () => {
                     boxShadow: 'none',
                   },
                 })}
-                // onClick={() => setAmount((prev) => prev[index] - 1)}
+                onClick={() => setDataCard(index, false)}
               >
                 <Remove />
               </Button>
               <TextField
                 name="amount"
                 value={product.count}
-                // onChange={(e) => setAmount(+e.target.value)}
+                disabled
               />
               <Button
                 variant="contained"
@@ -145,7 +177,7 @@ const CartTableItem: FC = () => {
                     boxShadow: 'none',
                   },
                 })}
-                // onClick={() => setAmount((prev) => prev + 1)}
+                onClick={() => setDataCard(index, true)}
               >
                 <Add />
               </Button>
@@ -153,11 +185,11 @@ const CartTableItem: FC = () => {
           </TableCell>
           <TableCell align="center">
             <Typography color="secondary" fontWeight={500}>
-              ${(product.price - (product.price * product.discount) / 100) * product.amount}
+              {(product.price - (product.price * product.discount) / 100) * product.count} VNĐ
             </Typography>
           </TableCell>
           <TableCell align="center">
-          <IconButton onClick={()=>deletItemCard(product.id)}>
+            <IconButton onClick={() => deletItemCard(product.id)}>
               <Delete />
             </IconButton>
           </TableCell>
@@ -169,12 +201,12 @@ const CartTableItem: FC = () => {
         <TableCell colSpan={3}></TableCell>
         <TableCell variant="head" align="center">
           <Typography fontSize="20px" fontWeight={600}>
-            Thành tiền:
+            Thành tiền: {total} VNĐ
           </Typography>
         </TableCell>
         <TableCell align="center">
           <Typography fontSize="18px" fontWeight={600} color="secondary">
-           
+
           </Typography>
         </TableCell>
       </TableRow>
