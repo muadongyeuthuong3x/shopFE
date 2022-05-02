@@ -13,6 +13,9 @@ import { FC } from 'react';
 import CartTableItem from './CartTableItem';
 
 const CartTableList: FC = () => {
+  const muatiep = ()=>{
+    window.open("http://localhost:3000/")
+  }
   return (
     <>
       <Table
@@ -57,6 +60,7 @@ const CartTableList: FC = () => {
           borderColor="#000000"
           textColor="#000000"
           type="submit"
+          onClick={muatiep}
         >
           Tiếp tục mua hàng
         </CustomMuiButton>

@@ -2,7 +2,7 @@ import { FavoriteBorder, Search, ShoppingBagOutlined } from '@mui/icons-material
 import { Box, Grid, Typography } from '@mui/material';
 import { CustomMuiIconButton } from 'components';
 import ProductModal from 'features/product/components/ProductModal';
-import { FC, Fragment, memo, useState } from 'react';
+import { FC, Fragment, memo, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '../../../constants';
 import { ProductItemControl } from '../home';
@@ -13,7 +13,7 @@ import { LocalKey, LocalStorage } from "ts-localstorage";
 export interface ProductItemProps {
   productList?: Product[];
   productColumn?: number;
-  a?:any
+  a?: any
 }
 
 export const productControl: ProductItemControl[] = [
@@ -48,46 +48,66 @@ const data: Product[] = [
   },
 ];
 
-const ProductItem: FC<ProductItemProps> = ({ productList, productColumn,a }) => {
+const ProductItem: FC<ProductItemProps> = ({ productList, productColumn, a }) => {
   const [openModal, setOpenModal] = useState(false);
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
   const FcLocalStrogate = (data: any) => {
-    const dataLocal: any = [];
     const key = new LocalKey("card", "");
     const dataLC: any = LocalStorage.getItem(key);
-    const a = JSON.parse(dataLC)
+    const a = JSON.parse(dataLC) || []
     let check = 0
-    if (dataLC) {
-      a && a?.map((item: any) => {
-        console.log(item.id === data.id)
-        if (item.id === data.id) {
-          item.count += 1
+    if (dataLC?.length > 0) {
+      for (var i = 0; i < a.length; i++) {
+        if (a[i].id === data.id) {
+          a[i].count = a[i].count + 1
+          console.log(a)
           check = 1
-          return check
-        } else {
-          check = 2
-          return check
+          LocalStorage.setItem(key, JSON.stringify(a))
+          toast.success("Thêm sản phẩm vào giỏ hàng thành công")
+          return
         }
-      })
+      }
+      if (check == 0) {
+        const dataPush = { ...data, count: 1 };
+        a.push(dataPush);
+        LocalStorage.setItem(key, JSON.stringify(a))
+        toast.success("Thêm sản phẩm vào giỏ hàng thành công")
+      }
     } else {
-      const dataPush = { ...data, count: 1 };
-      dataLocal.push(dataPush)
-      LocalStorage.setItem(key, JSON.stringify(dataLocal));
-    }
-    if (check === 1) {
-      LocalStorage.setItem(key, JSON.stringify(a));
-      console.log(a)
-    }else if(check ===2){
       const dataPush = { ...data, count: 1 };
       a.push(dataPush)
       LocalStorage.setItem(key, JSON.stringify(a));
+      toast.success("Thêm sản phẩm vào giỏ hàng thành công")
     }
-    toast.success("Thêm sản phẩm vào giỏ hàng thành công")
 
   }
+
+  const updateTim = (data: any) => {
+    const key = new LocalKey("array", "");
+    const dataLC: any = LocalStorage.getItem(key);
+    const tim = JSON.parse(dataLC) || []
+    if (tim.length > 0) {
+      let checktim = tim.find((item: any) => item.id === data.id);
+      if (checktim) {
+        const arrNew = tim.filter((item: any) => item.id != data.id)
+        LocalStorage.setItem(key, JSON.stringify(arrNew));
+        toast.success("Xóa sản phẩm yêu thích thành công")
+      } else {  
+        tim.push(data)
+        toast.success("Thêm sản phẩm yêu thích thành công")
+        LocalStorage.setItem(key, JSON.stringify(tim));
+      }
+    } else {
+      tim.push(data)
+      toast.success("Thêm sản phẩm yêu thích thành công")
+      LocalStorage.setItem(key, JSON.stringify(tim));
+    }
+  }
+
+ 
 
 
   return (
@@ -141,8 +161,12 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn,a }) => 
                       boxShadow="0 3px 10px rgb(0 0 0 / 8%)"
                       transition=".3s"
                       margin="0 10px"
+                      onClick={() => { updateTim(product) }}
                     >
+                     
                       <FavoriteBorder />
+                 
+                     
                     </CustomMuiIconButton>
                   </Box>
                   <Box
@@ -152,6 +176,7 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn,a }) => 
                       opacity: 0,
                       transform: 'translateX(30px)',
                     }}
+
                   >
                     <CustomMuiIconButton
                       title="Thêm vào giỏ hàng"

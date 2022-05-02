@@ -6,7 +6,7 @@ import ProductItem from './ProductItem';
 const ProductList: FC = () => {
   return (
     <Container maxWidth="xl">
-      <ProductItem productList={cart} />
+      <ProductItem />
     </Container>
   );
 };

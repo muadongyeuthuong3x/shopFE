@@ -2,11 +2,13 @@ import { FavoriteBorder, Search, ShoppingBagOutlined } from '@mui/icons-material
 import { Box, Grid, Typography } from '@mui/material';
 import { CustomMuiIconButton } from 'components';
 import ProductModal from 'features/product/components/ProductModal';
-import { FC, Fragment, memo, useState } from 'react';
+import { FC, Fragment, memo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '../../../constants';
 import { ProductItemControl } from '../../home/constants/home.constants';
 import ProductSlider from './ProductSlider';
+import { ToastContainer, toast } from 'react-toastify';
+import { LocalKey, LocalStorage } from "ts-localstorage";
 
 export interface ProductItemProps {
   productList?: Product[];
@@ -50,11 +52,75 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
+  
+  const [productListData, setproductList] = useState<any>([])
+
+  useEffect(() => {
+    const key = new LocalKey("array", "");
+    const dataLC: any = LocalStorage.getItem(key);
+    const count: any = JSON.parse(dataLC)
+    setproductList(count)
+  }, [productListData]);
+
+
+  const FcLocalStrogate = (data: any) => {
+    const key = new LocalKey("card", "");
+    const dataLC: any = LocalStorage.getItem(key);
+    const a = JSON.parse(dataLC) || []
+    let check = 0
+    if (dataLC?.length > 0) {
+      for (var i = 0; i < a.length; i++) {
+        if (a[i].id === data.id) {
+          a[i].count = a[i].count + 1
+          console.log(a)
+          check = 1
+          LocalStorage.setItem(key, JSON.stringify(a))
+          toast.success("Thêm sản phẩm vào giỏ hàng thành công")
+          return
+        }
+      }
+      if (check == 0) {
+        const dataPush = { ...data, count: 1 };
+        a.push(dataPush);
+        LocalStorage.setItem(key, JSON.stringify(a))
+        toast.success("Thêm sản phẩm vào giỏ hàng thành công")
+      }
+    } else {
+      const dataPush = { ...data, count: 1 };
+      a.push(dataPush)
+      LocalStorage.setItem(key, JSON.stringify(a));
+      toast.success("Thêm sản phẩm vào giỏ hàng thành công")
+    }
+
+  }
+
+  const updateTim = (data: any) => {
+    const key = new LocalKey("array", "");
+    const dataLC: any = LocalStorage.getItem(key);
+    const tim = JSON.parse(dataLC) || []
+    if (tim.length > 0) {
+      let checktim = tim.find((item: any) => item.id === data.id);
+      if (checktim) {
+        const arrNew = tim.filter((item: any) => item.id != data.id)
+        LocalStorage.setItem(key, JSON.stringify(arrNew));
+        toast.success("Xóa sản phẩm yêu thích thành công")
+      } else {  
+        tim.push(data)
+        toast.success("Thêm sản phẩm yêu thích thành công")
+        LocalStorage.setItem(key, JSON.stringify(tim));
+      }
+    } else {
+      tim.push(data)
+      toast.success("Thêm sản phẩm yêu thích thành công")
+      LocalStorage.setItem(key, JSON.stringify(tim));
+    }
+  }
+
 
   return (
     <>
       <Grid container spacing={3}>
-        {data?.map((product) => (
+        {productListData?.map((product:any) => (
           <Fragment key={product.id}>
             <Grid
               item
@@ -74,7 +140,7 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
                   },
                 }}
               >
-                <ProductSlider />
+                <ProductSlider imageList={product.image}/>
                 <Box
                   position="absolute"
                   right={0}
@@ -102,6 +168,7 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
                       boxShadow="0 3px 10px rgb(0 0 0 / 8%)"
                       transition=".3s"
                       margin="0 10px"
+                      onClick={() => { updateTim(product) }}
                     >
                       <FavoriteBorder />
                     </CustomMuiIconButton>
@@ -121,30 +188,12 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
                       boxShadow="0 3px 10px rgb(0 0 0 / 8%)"
                       transition=".3s"
                       margin="0 10px"
+                      onClick={() => { FcLocalStrogate(product) }}
                     >
                       <ShoppingBagOutlined />
                     </CustomMuiIconButton>
                   </Box>
-                  <Box
-                    sx={{
-                      transition: '.5s',
-                      visibility: 'hidden',
-                      opacity: 0,
-                      transform: 'translateX(30px)',
-                    }}
-                  >
-                    <CustomMuiIconButton
-                      title="Xem nhanh"
-                      width="46px"
-                      height="46px"
-                      boxShadow="0 3px 10px rgb(0 0 0 / 8%)"
-                      transition=".3s"
-                      margin="0 10px"
-                      onClick={handleOpenModal}
-                    >
-                      <Search />
-                    </CustomMuiIconButton>
-                  </Box>
+               
                 </Box>
               </Box>
               <Box

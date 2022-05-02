@@ -5,6 +5,7 @@ import { InputField } from 'components';
 import { Product } from '../../../constants';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
 
 const options = [36, 37, 38, 39, 40];
 
@@ -23,6 +24,11 @@ const ProductInfor: FC<ProductInforProps> = ({ product }) => {
   const handleFormSubmit = (values: any) => {
     console.log(values);
   };
+  const history  = useHistory();
+
+  const onClick = ()=>{
+    history.push('/cart');
+  }
 
   return (
     <Box display="flex" flexDirection="column">
@@ -168,6 +174,7 @@ const ProductInfor: FC<ProductInforProps> = ({ product }) => {
             borderColor="#000000"
             textColor="#000000"
             type="submit"
+            onClick={()=>onClick()}
           >
             Mua ngay
           </CustomMuiButton>
