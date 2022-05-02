@@ -7,10 +7,11 @@ import { Link, useParams } from 'react-router-dom';
 import BrandColumn from '../components/BrandColumn';
 import BrandFilter, { FilterOption } from '../components/BrandFilter';
 import BrandSort from '../components/BrandSort';
+import Loader from '../../../components/Loader/Loader'
 
-let optionFilterQuery= ''
 const BrandPage: FC = () => {
   const path:any= useParams();
+  const [loading, setLoading] = useState(false);
   const [productColumn, setProductColumn] = useState<number>(4);
   const [data, setData] = useState([]);
   const [filterOption, setFilterOption]= useState<FilterOption>({});
@@ -23,7 +24,9 @@ const BrandPage: FC = () => {
   }
   useEffect(()=>{
     const getData= async()=>{
+      setLoading(true)
       const res =await api.get(`product/all?limit=8${filterOption?.typeId?`&&typeId=${filterOption?.typeId}`:'' }${filterOption?.page?`&&page=${filterOption?.page-1}`:'' }${filterOption?.priceMax?`&&priceMax=${filterOption?.priceMax}`:'' }${filterOption?.priceMin?`&&priceMin=${filterOption?.priceMin}`:'' }${filterOption?.sizes?.length?`&&sizeId=${filterOption?.sizes.join(',')}`:'' }`);
+      setLoading(false)
       const convertDataType= res.data.products.rows.map((obj: any) => ({
         ...obj,
         name: obj.productName, 
@@ -87,7 +90,11 @@ const BrandPage: FC = () => {
               />
               <BrandSort />
             </Box>
-            <ProductItem productColumn={productColumn} productList={data} />
+            {
+              loading?  <Loader isFullScreen={false}/>:
+              <ProductItem productColumn={productColumn} productList={data} />
+            }
+           
             <Box
               marginTop="40px"
               width="100%"
