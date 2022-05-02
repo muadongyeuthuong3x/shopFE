@@ -113,9 +113,10 @@ const LoginForm: FC<LoginFormProps> = ({ initialValues, onSubmit }) => {
         </Box>
       </Box>
       <ToastContainer
-position="top-right"
-autoClose={3000}
-closeOnClick/>
+        position="top-right"
+        autoClose={3000}
+        closeOnClick
+      />
     </Box>
   );
 };

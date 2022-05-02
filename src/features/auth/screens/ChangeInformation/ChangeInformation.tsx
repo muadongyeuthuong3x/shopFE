@@ -14,7 +14,7 @@ const ChangeInformationPage: FC = () => {
     lastName: '',
   };
 
-  return <ChangeInformationForm onSubmit={handleChangeInformation} initialValues={intialValues} />;
+  return <ChangeInformationForm />;
 };
 
 export default ChangeInformationPage;

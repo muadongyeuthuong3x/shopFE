@@ -60,3 +60,8 @@ export const recoverPasswordSchema = yup.object().shape({
     .required('Vui lòng nhập mật khẩu của bạn')
     .oneOf([yup.ref('password')], 'Mật khẩu nhập lại không chính xác'),
 });
+
+
+export const updateUserSchema = yup.object().shape({
+ 
+});
