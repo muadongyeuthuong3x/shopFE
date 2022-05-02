@@ -34,6 +34,7 @@ import { useForm } from 'react-hook-form';
 import { Link, useHistory } from 'react-router-dom';
 import { HeaderNav, HeaderPathEnum } from './constants/Header.path';
 import * as yup from 'yup';
+import { api } from 'api/api';
 
 const schema = yup.object().shape({
   keyword: yup.string().required('Vui lòng nhập tên giày'),
@@ -61,6 +62,15 @@ export const Header: FC = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  useEffect(()=>{
+    const getAuth= async ()=>{
+      const  res= await api.get('user/me');
+      dispatch(authActions.login(res.data))
+    }
+    getAuth()
+    
+  },[])
 
   const handleScroll = () => {
     if (window.scrollY === 0) {

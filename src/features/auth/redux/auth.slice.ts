@@ -24,6 +24,9 @@ const authSlice = createSlice({
       localStorage.removeItem(STORAGE_KEY.TOKEN);
       localStorage.removeItem(STORAGE_KEY.USER);
     },
+    login: (state, actions) => {
+     state.currentUser= actions.payload.user
+    },
   },
   extraReducers: {},
 });

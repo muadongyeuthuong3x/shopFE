@@ -1,8 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Typography } from '@mui/material';
+import { useAppSelector } from '../../../../app/hooks';
+import { RootState } from 'app/store';
 import { InputField } from 'components';
 import { RegisterPayload, registerSchema } from 'features/auth/auth';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export interface ChangeInformationFormProps {
@@ -15,11 +17,13 @@ const ChangeInformationForm: FC<ChangeInformationFormProps> = ({ initialValues, 
     defaultValues: initialValues,
     resolver: yupResolver(registerSchema),
   });
-
+  
+  const userInfor = useAppSelector((state: RootState) => state.auth.currentUser);
   const handleFormSubmit = (formValues: RegisterPayload) => {
+    console.log('formValues');
+    console.log(formValues);
     formValues.fullName = `${formValues.firstName} ${formValues.lastName}`;
     delete formValues.confirmPassword;
-    console.log(formValues);
   };
 
   return (
@@ -45,9 +49,9 @@ const ChangeInformationForm: FC<ChangeInformationFormProps> = ({ initialValues, 
               <InputField control={control} label="Tên" name="lastName" />
             </Box>
           </Box>
-          <InputField control={control} label="Email" name="email" />
-          <InputField control={control} label="Số điện thoại" name="phoneNumber" />
-          <InputField control={control} label="Địa chỉ" name="address" />
+          <InputField control={control} label="Email" name="email" value={userInfor?.email}  />
+          <InputField control={control} label="Số điện thoại" name="phoneNumber"  value={userInfor?.phoneNumber} />
+          <InputField control={control} label="Địa chỉ" name="address" value={userInfor?.address} />
 
           <Button
             variant="contained"
