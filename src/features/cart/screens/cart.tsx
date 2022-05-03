@@ -1,10 +1,26 @@
 import { Box, Breadcrumbs, Container, Typography } from '@mui/material';
+import { CustomMuiButton } from 'components';
 import { HomeEnumPath } from 'features/home/home';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { LocalKey, LocalStorage } from "ts-localstorage";
 import CartTableList from '../components/CartTableList';
 
 const CartPage: FC = () => {
+  const [isCart, setIsCart] = useState(false)
+  useEffect(() => {
+    const key = new LocalKey("card", "");
+    const dataLC: any = LocalStorage.getItem(key);
+    if(dataLC){
+      setIsCart(true)
+    }
+    
+  }, []);
+
+  const muatiep = ()=>{
+    window.open("http://localhost:3000/")
+  }
+
   return (
     <>
       <Box
@@ -36,7 +52,28 @@ const CartPage: FC = () => {
       </Box>
       <Container maxWidth="xl">
         <Box padding="50px 0">
-          <CartTableList />
+          {
+            isCart? <CartTableList />: 
+            <>
+             <Typography  fontSize="30px"  textAlign="center" textTransform="uppercase" mb={4}>Giỏ hàng của bạn</Typography>
+             <Typography   textAlign="center">Giỏ hàng của bạn đang trống!</Typography>
+             <Box display="flex"  justifyContent="center" >
+              <CustomMuiButton
+                fullWidth={false}
+
+                backgroundColor="#000000"
+                color="#ffffff"
+                borderColor="#000000"
+                textColor="#000000"
+                type="submit"
+                onClick={muatiep}
+              >
+                Tiếp tục mua hàng
+              </CustomMuiButton>
+            </Box>
+            </>
+          }
+          
         </Box>
       </Container>
     </>

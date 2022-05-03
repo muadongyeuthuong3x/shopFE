@@ -27,10 +27,13 @@ const CartTableItem: FC = () => {
   useEffect(() => {
     const key = new LocalKey("card", "");
     const dataLC: any = LocalStorage.getItem(key);
+    if(!dataLC){
+      return
+    }
     const count: any = JSON.parse(dataLC)
     setproductList(count)
     moneyTotal()
-  }, [productList]);
+  }, []);
 
 
   const moneyTotal = () => {

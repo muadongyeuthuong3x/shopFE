@@ -60,11 +60,11 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
     const dataLC: any = LocalStorage.getItem(key);
     const count: any = JSON.parse(dataLC)
     setproductList(count)
-  }, [productListData]);
+  }, []);
 
 
   const FcLocalStrogate = (data: any) => {
-    const key = new LocalKey("card", "");
+    const key = new LocalKey("array", "");
     const dataLC: any = LocalStorage.getItem(key);
     const a = JSON.parse(dataLC) || []
     let check = 0
@@ -120,7 +120,9 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
   return (
     <>
       <Grid container spacing={3}>
-        {productListData?.map((product:any) => (
+        {
+        // productListData?.length=0?"Chưa có sản phẩm yêu thích nào!" :
+        productListData?.map((product:any) => (
           <Fragment key={product.id}>
             <Grid
               item
@@ -140,7 +142,7 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
                   },
                 }}
               >
-                <ProductSlider imageList={product.image}/>
+                <ProductSlider imageList={product?.image}/>
                 <Box
                   position="absolute"
                   right={0}
