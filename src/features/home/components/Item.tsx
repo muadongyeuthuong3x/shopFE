@@ -133,7 +133,7 @@ const ProductItem: FC<ProductItemProps> = ({ product,productColumn}) => {
                   },
                 }}
               >
-                <Link to="">{product.name}</Link>
+                <Link to={"/product/"+product.id}>{product.name}</Link>
                 <Box fontSize="15px" margin="10px 015px" display="flex" justifyContent="center">
                   <Typography color="secondary" fontWeight={700} marginRight="5px">
                     ${product.price - (product.price * product.discount) / 100}
