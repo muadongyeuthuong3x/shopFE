@@ -44,6 +44,7 @@ const schema = yup.object().shape({
 
 
 export const Header: FC = () => {
+  const [searchKey, setSearchKey] = useState<String>('');
   const [scroll, setScroll] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
@@ -107,7 +108,9 @@ export const Header: FC = () => {
   };
 
   const handleSearch = (values: any) => { };
-
+  const handleChangeSearch=(e:any)=>{
+    setSearchKey(e.target.value)
+  }
   return (
     <>
       <AppBar
@@ -218,7 +221,7 @@ export const Header: FC = () => {
       <Drawer anchor="right" open={openDrawer} onClose={handleCloseDrawer} variant="temporary">
         <Box
           component="form"
-          onSubmit={handleSubmit(handleSearch)}
+          // onSubmit={handleSubmit(handleSearch)}
           display="flex"
           padding="20px"
           flexDirection="column"
@@ -255,26 +258,29 @@ export const Header: FC = () => {
               },
             }}
           >
-            <InputField control={control} name="keyword" />
-            <Button
-              variant="contained"
-              type="submit"
-              sx={(theme) => ({
-                boxShadow: 'none',
-                borderLeft: 'none',
-                height: '40px',
-                borderRadius: 0,
-                backgroundColor: theme.palette.primary.contrastText,
-                color: theme.palette.primary.main,
-                '&:hover': {
+            <InputField control={control} name="keyword" onChange={handleChangeSearch} />
+            <Link to={"/search?key="+searchKey}>
+              <Button
+                variant="contained"
+                type="submit"
+                sx={(theme) => ({
+                  boxShadow: 'none',
+                  borderLeft: 'none',
+                  height: '40px',
+                  borderRadius: 0,
                   backgroundColor: theme.palette.primary.contrastText,
                   color: theme.palette.primary.main,
-                  boxShadow: 'none',
-                },
-              })}
-            >
-              <Search />
+                  '&:hover': {
+                    backgroundColor: theme.palette.primary.contrastText,
+                    color: theme.palette.primary.main,
+                    boxShadow: 'none',
+                  },
+                })}
+
+              >
+                <Search />
             </Button>
+            </Link>
           </Box>
         </Box>
       </Drawer>

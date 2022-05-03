@@ -28,7 +28,7 @@ const ProductList: FC = () => {
 
   useEffect(()=>{
     const getSaleProduct= async()=>{
-      const res =await api.get('product/all?sale=1&&page='+saleProductPage);
+      const res =await api.get('product/all?limit=4&&sale=1&&page='+saleProductPage);
       const convertDataType:never[]= res.data.products.rows.map((obj: any) => ({
         ...obj,
         name: obj.productName, 
