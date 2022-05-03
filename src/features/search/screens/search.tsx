@@ -10,7 +10,7 @@ const SearchPage: FC = () => {
   const keySearch=path?.search.split("=")[1];
   useEffect(()=>{
     const getData= async()=>{
-      const res =await api.get(`product/all?search=${keySearch}`);
+      const res =await api.get(`product/all?limit=50&&search=${keySearch}`);
       const convertDataType= res.data.products.rows.map((obj: any) => ({
         ...obj,
         name: obj.productName, 

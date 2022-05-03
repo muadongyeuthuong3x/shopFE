@@ -10,11 +10,20 @@ import {
 } from '@mui/material';
 import { CustomMuiButton } from 'components';
 import { FC } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
 import CartTableItem from './CartTableItem';
-
+import { useHistory } from "react-router-dom";
 const CartTableList: FC = () => {
+  let history = useHistory();
   const muatiep = ()=>{
-    window.open("http://localhost:3000/")
+    history.push("/");
+  }
+  const handlePayment=()=>{
+    toast.success('Đặt hàng thàng công!');
+    localStorage.removeItem('card');
+    setTimeout(()=>{
+      history.push("/");
+    },1000)
   }
   return (
     <>
@@ -50,6 +59,7 @@ const CartTableList: FC = () => {
           borderColor="#ff871d"
           textColor="#ff871d"
           margin="0 15px 0 0"
+          onClick={handlePayment}
         >
           Thanh toán
         </CustomMuiButton>
@@ -65,6 +75,11 @@ const CartTableList: FC = () => {
           Tiếp tục mua hàng
         </CustomMuiButton>
       </Box>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        closeOnClick
+      />
     </>
   );
 };

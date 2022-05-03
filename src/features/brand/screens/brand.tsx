@@ -11,6 +11,7 @@ import Loader from '../../../components/Loader/Loader'
 
 const BrandPage: FC = () => {
   const path:any= useParams();
+  const [countPage,setCountPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [productColumn, setProductColumn] = useState<number>(4);
   const [data, setData] = useState([]);
@@ -20,12 +21,13 @@ const BrandPage: FC = () => {
   };
 
   const changPage=(event:any,page:number)=>{
-    setFilterOption({...filterOption, page})
+    setFilterOption({...filterOption, page:page})
   }
   useEffect(()=>{
     const getData= async()=>{
       setLoading(true)
       const res =await api.get(`product/all?limit=8${filterOption?.typeId?`&&typeId=${filterOption?.typeId}`:'' }${filterOption?.page?`&&page=${filterOption?.page-1}`:'' }${filterOption?.priceMax?`&&priceMax=${filterOption?.priceMax}`:'' }${filterOption?.priceMin?`&&priceMin=${filterOption?.priceMin}`:'' }${filterOption?.sizes?.length?`&&sizeId=${filterOption?.sizes.join(',')}`:'' }`);
+      setCountPage(res.data.products.count)
       setLoading(false)
       const convertDataType= res.data.products.rows.map((obj: any) => ({
         ...obj,
@@ -110,7 +112,7 @@ const BrandPage: FC = () => {
                 },
               })}
             >
-              <Pagination page={filterOption?.page} color="secondary" onChange={changPage} count={Math.floor(data?.length/8)+1} />
+              <Pagination page={filterOption.page? filterOption.page:1} color="secondary" onChange={changPage} count={Math.floor(countPage/8)+1} />
             </Box>
           </Box>
         </Box>
