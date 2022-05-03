@@ -63,6 +63,8 @@ const CartTableItem: FC = () => {
   }
 
   const setDataCard = (index: number, b: boolean) => {
+    console.log('index')
+    console.log(index)
     const key = new LocalKey("card", "");
     const dataLC: any = LocalStorage.getItem(key);
     const a: any = JSON.parse(dataLC)
@@ -78,6 +80,7 @@ const CartTableItem: FC = () => {
         LocalStorage.setItem(key, JSON.stringify(a));
       }
     }
+    setproductList(a);
   }
 
   return (
