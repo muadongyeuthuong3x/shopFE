@@ -1,11 +1,29 @@
 import { Box, Breadcrumbs, Container, Theme, Typography } from '@mui/material';
 import { BlogEnumPath } from 'features/blog/blog';
 import { HomeEnumPath } from 'features/home/home';
-import { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { FC, useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import BlogImage from 'assets/image/blog.png';
+import { api } from 'api/api';
 
 const BlogDetailsPage: FC = () => {
+  const [data, setData] = useState<any>()
+  const path:any = useParams();
+  const blogId= path?.slug
+  useEffect(()=>{
+    const getBlog= async ()=>{
+      try {
+         const res = await api.get("blog/"+blogId)
+        console.log(res)
+        if(res?.data){
+          setData(res.data.blog)
+        }
+      } catch (error) {
+        console.log("lỗi blog get!")
+      }
+    }
+    getBlog()
+  },[])
   return (
     <Container maxWidth="xl">
       <Box padding="20px 0">
@@ -21,13 +39,13 @@ const BlogDetailsPage: FC = () => {
           <Link to={HomeEnumPath.HOMEPAGE}>Trang chủ</Link>
           <Link to={BlogEnumPath.BLOG}>Tin tức</Link>
           <Typography fontWeight={500} variant="body1" color="secondary">
-            Help You Have Comfortable Steps
+           {data?.title}
           </Typography>
         </Breadcrumbs>
       </Box>
       <Box>
         <Box height="500px" position="relative">
-          <img src={BlogImage} alt="" width="100%" height="100%" />
+          <img src={data?.image} alt="" width="100%" height="100%" />
           <Box
             position="absolute"
             bottom={0}
@@ -42,26 +60,12 @@ const BlogDetailsPage: FC = () => {
               fontWeight={500}
               align="center"
             >
-              Help You Have Comfortable Steps
+              {data?.title}
             </Typography>
           </Box>
         </Box>
         <Box mt={4}>
-          <Typography lineHeight="28px" color="#a8a8a8">
-            Sports shoes are shoes used in sports activities or used when exercising to improve
-            health. Now, sports shoes are also used in daily activities such as going to work,
-            school, going out, ... because of its convenience and fashion. It is no coincidence that
-            sports shoes are created and used every time you exercise or exercise. The reason is
-            that compared to other types of shoes, sports shoes carry more superior features, so
-            they are more suitable for movement and training. Sports shoes are always designed to be
-            smooth, comfortable, cool and ensure maximum safety for the feet. It is important that
-            sports shoes also provide perfect support and support for the feet when exercising.
-            Today, sports shoes not only integrate many great features, but also focus on style and
-            color. That is the reason that the range of uses of sports shoes is increasingly wide,
-            they are used in all activities and fashion purposes. You can see the outfits from
-            young, dynamic to elegant and luxurious with sneakers anywhere on the street. It can be
-            seen that the spread and influence of sports shoes in the fashion industry is
-            undeniable.
+          <Typography lineHeight="28px" color="#a8a8a8" dangerouslySetInnerHTML={{__html: data?.content}}>
           </Typography>
         </Box>
       </Box>

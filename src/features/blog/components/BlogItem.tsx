@@ -23,7 +23,7 @@ const BlogItem: FC<BlogItemProps> = ({ blogList }) => {
             }}
           >
             <Link to="">
-              <img src={BlogImage} alt="" width="100%" />
+              <img src={blog.image} alt="" width="100%" />
             </Link>
           </Box>
           <Box
@@ -52,15 +52,14 @@ const BlogItem: FC<BlogItemProps> = ({ blogList }) => {
               },
             })}
           >
-            <Link to="">Help You Have Comfortable Steps</Link>
+            <Link to={"./blog/"+blog.id}>{blog.title}</Link>
             <Typography color="#a8a8a8" fontSize="15px" margin="5px 0 15px" lineHeight="24px">
-              Sports shoes are shoes used in sports activities or used when exercising to improve
-              health. Now, sports shoes...
+              {blog.summary}
             </Typography>
             <Typography fontSize="12px" textTransform="uppercase" color="#aaa" fontWeight={500}>
               AUG 31,2021
             </Typography>
-            <Link to="">
+            <Link to={"./blog/"+blog.id}>
               <Typography
                 variant="caption"
                 fontSize="14px"
