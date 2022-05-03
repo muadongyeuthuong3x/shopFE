@@ -80,6 +80,7 @@ const CartTableItem: FC = () => {
         LocalStorage.setItem(key, JSON.stringify(a));
       }
     }
+    moneyTotal()
     setproductList(a);
   }
 
