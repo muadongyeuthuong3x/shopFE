@@ -3,9 +3,11 @@ import { Box, Button, Typography } from '@mui/material';
 import { CustomMuiButton, CustomMuiIconButton, CustomRadioGroupField } from 'components';
 import { InputField } from 'components';
 import { Product } from '../../../constants';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
+import { api } from 'api/api';
+import { FcLocalStrogate, updateTim } from 'helpers/action';
 
 const options = [36, 37, 38, 39, 40];
 
@@ -14,6 +16,7 @@ export interface ProductInforProps {
 }
 
 const ProductInfor: FC<ProductInforProps> = ({ product }) => {
+  const [sizes, setSizes] = useState([])
   const { control, handleSubmit, setValue, getValues } = useForm({
     defaultValues: {
       amount: 1,
@@ -29,6 +32,20 @@ const ProductInfor: FC<ProductInforProps> = ({ product }) => {
   const onClick = ()=>{
     history.push('/cart');
   }
+
+  useEffect(()=>{
+    const getSizes= async ()=>{
+      try {
+         const res = await api.get('productSize/'+product?.id);
+          setSizes(res?.data?.sizes)
+      } catch (error) {
+        console.log(error)
+      }
+     
+    }
+    getSizes();
+  },[])
+
 
   return (
     <Box display="flex" flexDirection="column">
@@ -64,6 +81,7 @@ const ProductInfor: FC<ProductInforProps> = ({ product }) => {
             width="40px"
             height="40px"
             border="1px solid #e9e9e9"
+            onClick={() => { updateTim(product) }}
           >
             <FavoriteBorder />
           </CustomMuiIconButton>
@@ -86,7 +104,7 @@ const ProductInfor: FC<ProductInforProps> = ({ product }) => {
           >
             Size
           </Typography>
-          <CustomRadioGroupField control={control} name="size" options={options} />
+          <CustomRadioGroupField control={control} name="size" options={sizes} />
         </Box>
         <Box display="flex" alignItems="flex-end">
           <Typography
@@ -164,6 +182,7 @@ const ProductInfor: FC<ProductInforProps> = ({ product }) => {
             borderColor="#ff871d"
             textColor="#ff871d"
             margin="0 15px 0 0"
+            onClick={() => { FcLocalStrogate(product) }}
           >
             Thêm vào giỏ hàng
           </CustomMuiButton>
