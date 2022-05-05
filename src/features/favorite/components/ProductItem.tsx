@@ -49,7 +49,7 @@ const data: Product[] = [
 
 const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
   const [openModal, setOpenModal] = useState(false);
-
+  const [callList, setCallList] =  useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
   
@@ -60,7 +60,7 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
     const dataLC: any = LocalStorage.getItem(key);
     const count: any = JSON.parse(dataLC)
     setproductList(count)
-  }, []);
+  }, [callList]);
 
 
   const FcLocalStrogate = (data: any) => {
@@ -114,6 +114,7 @@ const ProductItem: FC<ProductItemProps> = ({ productList, productColumn }) => {
       toast.success("Thêm sản phẩm yêu thích thành công")
       LocalStorage.setItem(key, JSON.stringify(tim));
     }
+    setCallList(!callList)
   }
 
 
